@@ -41,11 +41,11 @@ class DB {
     return this.connection.promise().query("INSERT INTO employee SET ?", employee);
   }
 
-  // Update an employee's role
-  updateEmployeeRole(employeeId, roleId) {
+  // Update an employee's manager
+  updateEmployeeManager(employeeId, managerId) {
     return this.connection.promise().query(
-      "UPDATE employee SET role_id = ? WHERE id = ?",
-      [roleId, employeeId]
+      "UPDATE employee SET manager_id = ? WHERE id = ?",
+      [managerId, employeeId]
     );
   }
 
@@ -72,6 +72,38 @@ class DB {
       employeeId
     );
   }
+
+//  Delete a department
+  deleteDepartment(departmentId) {
+    return this.connection.promise().query(
+      "DELETE FROM department WHERE id = ?",
+      departmentId
+    );
+  }
+  
+  // Delete a role
+  deleteRole(roleId) {
+    return this.connection.promise().query(
+      "DELETE FROM role WHERE id = ?",
+      roleId
+    );
+  }
+  // Delete an employee
+  deleteEmployee(employeeId) {
+    return this.connection.promise().query(
+      "DELETE FROM employee WHERE id = ?",
+      employeeId
+    );
+  }
+// Create a function to view the total utilized budget of a department -- ie the combined salaries of all employees in that department
+  viewDepartmentBudgets(departmentId) {
+    return this.connection.promise().query(
+      "SELECT department.name AS department, SUM(role.salary) AS budget FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id WHERE department.id = ?",
+      departmentId
+    );
+  }
 }
+
+
 
 module.exports = new DB(connection);
