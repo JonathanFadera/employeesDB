@@ -1,53 +1,77 @@
-// const connection = require('./connection');
+const connection = require("./connection");
 
-// function viewEmployees() {
-//     console.log('Viewing all employees...\n');
+class DB {
+  constructor(connection) {
+    this.connection = connection;
+  }
 
-//     var query =
-//         `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
-//         FROM employee
-//         LEFT JOIN role ON employee.role_id = role.id
-//         LEFT JOIN department ON role.department_id = department.id
-//         LEFT JOIN employee manager ON manager.id = employee.manager_id`;
+  // View all departments
+  findAllDepartments() {
+    return this.connection.promise().query(
+      "SELECT department.id, department.name FROM department"
+    );
+  }
 
-//     connection.query(query, function (err, res) {
-//         if (err) throw err;
+  // View all roles
+  findAllRoles() {
+    return this.connection.promise().query(
+      "SELECT role.id, role.title, department.name AS department, role.salary FROM role LEFT JOIN department on role.department_id = department.id"
+    );
+  }
 
-//         console.table(res);
-//         console.log("Employees viewed!\n");
-//         mainMenu();
-//     });
-//     }
+  // View all employees
+  findAllEmployees() {
+    return this.connection.promise().query(
+      "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id LEFT JOIN employee manager on employee.manager_id = manager.id;"
+    );
+  }
 
-// function viewRoles() {
-//     console.log('Viewing all roles...\n');
+  // Add a department
+  createDepartment(department) {
+    return this.connection.promise().query("INSERT INTO department SET ?", department);
+  }
 
-//     var query =
-//         `SELECT role.id, role.title, department.name AS department, role.salary 
-//         FROM role
-//         LEFT JOIN department ON role.department_id = department.id`;
+  // Add a role
+  createRole(role) {
+    return this.connection.promise().query("INSERT INTO role SET ?", role);
+  }
 
-//     connection.query(query, function (err, res) {
-//         if (err) throw err;
+  // Add an employee
+  createEmployee(employee) {
+    return this.connection.promise().query("INSERT INTO employee SET ?", employee);
+  }
 
-//         console.table(res);
-//         console.log("Roles viewed!\n");
-//         mainMenu();
-//     });
-// }
+  // Update an employee's role
+  updateEmployeeRole(employeeId, roleId) {
+    return this.connection.promise().query(
+      "UPDATE employee SET role_id = ? WHERE id = ?",
+      [roleId, employeeId]
+    );
+  }
 
-// function viewDepartments() {
-//     console.log('Viewing all departments...\n');
+  // Find all employees by manager
+  findAllEmployeesByManager(managerId) {
+    return this.connection.promise().query(
+      "SELECT employee.id, employee.first_name, employee.last_name, role.title FROM employee LEFT JOIN role on employee.role_id = role.id WHERE manager_id = ?",
+      managerId
+    );
+  }
 
-//     var query =
-//         `SELECT department.id, department.name 
-//         FROM department`;
+  // Find all employees by department
+  findAllEmployeesByDepartment(departmentId) {
+    return this.connection.promise().query(
+      "SELECT employee.id, employee.first_name, employee.last_name, role.title FROM employee LEFT JOIN role on employee.role_id = role.id WHERE department_id = ?",
+      departmentId
+    );
+  }
 
-//     connection.query(query, function (err, res) {
-//         if (err) throw err;
+  // Find all managers
+  findAllManagers(employeeId) {
+    return this.connection.promise().query(
+      "SELECT DISTINCT e.id, e.first_name, e.last_name FROM employee e WHERE e.id != ? AND e.id = e.manager_id",
+      employeeId
+    );
+  }
+}
 
-//         console.table(res);
-//         console.log("Departments viewed!\n");
-//         mainMenu();
-//     });
-// }
+module.exports = new DB(connection);
