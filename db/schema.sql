@@ -1,11 +1,11 @@
 -- Dropes the database if exists
-DROP DATABASE IF EXISTS employeeDB;
+DROP DATABASE IF EXISTS managers_DB;
 
 -- creates the database
-CREATE DATABASE employeeDB;
+CREATE DATABASE managers_DB;
 
 -- use the employee_db database
-USE employeeDB;
+USE managers_DB;
 
 
 -- creates the table named department within the employee_db database

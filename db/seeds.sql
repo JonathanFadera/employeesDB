@@ -1,28 +1,28 @@
 USE employee_db;
 
 INSERT INTO department (name) VALUES
-('Sales'),
-('Engineering'),
-('Finance'),
-('Legal');
+('Minister for Magic and Support Staff'),
+('Department of Magical Law Enforcement'),
+('Department of Magical Accidents and Catastrophes'),
+('Department of Magical Internal Magical Cooperation');
+
 
 INSERT INTO role (title, salary, department_id) VALUES
-('Full Stack Developer', 80000, 1),
-('Software Engineer', 120000, 1),
-('Accountant', 10000, 2), 
-('Finanical Analyst', 150000, 2),
-('Marketing Coordindator', 70000, 3), 
-('Sales Lead', 90000, 3),
-('Project Manager', 100000, 4),
-('Operations Manager', 90000, 4);
-
+('Minister for Magic', 140000, 1),
+('Senior Undersecretary', 80000, 1),
+('Head of the Department', 200000, 2),
+('Auror', 130000, 2),
+('Carreer Advisor', 70000, 3),
+('Obliviator', 60000, 3),
+('Senior Liaison Minister', 80000, 4),
+('Lead Liaison Officer', 60000, 4);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES
-('John', 'Doe', 1, NULL),
-('Jane', 'Doe', 2, 1),
-('Mike', 'Smith', 3, 2),
-('Sally', 'Jones', 4, 3),
-('Bill', 'Johnson', 5, 4),
-('Bob', 'Smith', 6, 5),
-('Joe', 'Doe', 7, 6),
-('Sue', 'Smith', 8, 7);
+('Hermione', 'Granger', 1, 1),
+('Dolores', 'Umbridge', 2, 1),
+('Harry', 'Potter', 3, 2),
+('Ronald', 'Weasley', 4, 3),
+('Cornelius', 'Fudge', 5, 4),
+('Arnold', 'Peasegood', 6, 5),
+('Bartemius', 'Crouch', 7, 6),
+('Gareth', 'Greengrass', 8, 7);
