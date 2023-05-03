@@ -7,9 +7,11 @@ const queries = require('./db/queries');
 init();
 async function init() {
   console.log("===================================")
+  console.log("|                                 |")
   console.log("|            WELCOME TO           |")
   console.log("|         HOGWARTS EMPLOYEE       |")
   console.log("|             DATABASE            |")
+  console.log("|                                 |")
   console.log("===================================");
   await start();
 }
@@ -327,7 +329,7 @@ function deleteDepartment() {
       const departmentChoices = departments.map(({ id, name }) => ({
         name: name,
         value: id,
-      }))
+      }));
       inquirer.prompt([
         {
           type: 'list',
@@ -336,12 +338,13 @@ function deleteDepartment() {
           choices: departmentChoices
         }
       ])
-        .then(department => {
-          queries.deleteDepartment(department)
+        .then(answer => {
+          const departmentId = answer.id;
+          queries.deleteDepartment(departmentId)
             .then(() => console.log("Department deleted"))
-            .then(() => start())
-        })
-    })
+            .then(() => start());
+        });
+    });
 }
 
 // delete role function
