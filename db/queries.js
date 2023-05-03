@@ -40,10 +40,18 @@ class DB {
   createEmployee(employee) {
     return this.connection.promise().query("INSERT INTO employee SET ?", employee);
   }
-  // Add a manager
-  createManager(manager) {
-    return this.connection.promise().query("INSERT INTO employee SET ?", manager);
-  }
+  // // Add an employee manager
+  // createEmployeeManager(employeeManager) {
+  //   return this.connection.promise()
+  //     .query("INSERT INTO employee SET ?", employeeManager)
+  //     .then(([rows]) => rows)
+  //     .catch((error) => {
+  //       console.error(error);
+  //       throw new Error('Failed to create employee manager.');
+  //     });
+  // }
+  
+
 
   // Find all possible managers
   findAllPossibleManagers(employeeId) {
@@ -61,6 +69,8 @@ class DB {
       [managerId, employeeId]
     );
   }
+
+  
 
   // Find all employees by manager
   findAllEmployeesByManager(managerId) {
