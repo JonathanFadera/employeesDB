@@ -1,4 +1,4 @@
-USE employee_db;
+USE managers_DB table;
 
 INSERT INTO department (name) VALUES
 ('Ministry for Magic'),
