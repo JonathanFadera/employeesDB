@@ -90,7 +90,7 @@ class DB {
 // Create a function to view the total utilized budget of a department -- ie the combined salaries of all employees in that department
   viewDepartmentBudgets(departmentId) {
     return this.connection.promise().query(
-      "SELECT department.name AS department, SUM(role.salary) AS budget FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id WHERE department.id = ?",
+      "SELECT department.name AS department, SUM(role.salary) AS budget FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = 5 WHERE department.id = 5",
       departmentId
     );
   }

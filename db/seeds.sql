@@ -1,4 +1,4 @@
-USE managers_DB table;
+-- USE managers_DB table;
 
 INSERT INTO department (name) VALUES
 ('Ministry for Magic'),
@@ -8,14 +8,14 @@ INSERT INTO department (name) VALUES
 
 
 INSERT INTO role (title, salary, department_id) VALUES
-('Minister for Magic', 140000, 1),
-('Senior Undersecretary', 80000, 1),
-('Head of the Department', 200000, 2),
-('Auror', 130000, 2),
-('Career Advisor', 70000, 3),
-('Obliviator', 60000, 3),
-('Senior Liaison Minister', 80000, 4),
-('Lead Liaison Officer', 60000, 4);
+('Minister for Magic', 60000, 1),
+('Senior Undersecretary', 40000, 2),
+('Head of the Department', 90000, 3),
+('Auror', 70000, 4),
+('Career Advisor', 30000, 5),
+('Obliviator', 20000, 6),
+('Senior Liaison Minister', 60000, 7),
+('Lead Liaison Officer', 40000, 8);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES
 ('Hermione', 'Granger', 1, 1),
