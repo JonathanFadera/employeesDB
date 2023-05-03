@@ -6,7 +6,11 @@ const queries = require('./db/queries');
 
 init();
 async function init() {
-  console.log("Welcome to the Hogwarts Database!");
+  console.log("===================================")
+  console.log("|            WELCOME TO           |")
+  console.log("|        EMPLOYEE HOGWARTS        |")
+  console.log("|             DATABASE            |")
+  console.log("===================================");
   await start();
 }
 // prompt user to select an action to perform
@@ -72,7 +76,12 @@ function start() {
           viewDepartmentBudgets();
           break;
         case 'Exit':
-          console.log("Goodbye!");
+          console.log("===================================")
+          console.log("|            THANK YOU            |")
+          console.log("|            FOR USING            |")
+          console.log("|    HOGWARTS EMPLOYEE DATABASE   |")
+          console.log("===================================");
+
           process.exit();
           break;
         // default:
