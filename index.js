@@ -398,27 +398,27 @@ function deleteEmployee() {
 }
 
 
-// function to view department budgets
-function viewDepartmentBudgets() {
-  queries.findAllDepartments()
-    .then(([rows]) => {
-      let departments = rows;
-      const departmentChoices = departments.map(({ id, name }) => ({
-        name: name,
-        value: id,
-      }))
-      inquirer.prompt([
-        {
-          type: 'list',
-          name: 'id',
-          message: 'Which department would you like to view?',
-          choices: departmentChoices
-        }
-      ])
-        .then(department => {
-          queries.viewDepartmentBudgets(department)
-            .then(() => console.log("Viewed department budgets"))
-            .then(() => start())
-        })
-    })
-}
+// // function to view department budgets
+// function viewDepartmentBudgets() {
+//   queries.findAllDepartments()
+//     .then(([rows]) => {
+//       let departments = rows;
+//       const departmentChoices = departments.map(({ id, name }) => ({
+//         name: name,
+//         value: id,
+//       }))
+//       inquirer.prompt([
+//         {
+//           type: 'list',
+//           name: 'id',
+//           message: 'Which department would you like to view?',
+//           choices: departmentChoices
+//         }
+//       ])
+//         .then(department => {
+//           queries.viewDepartmentBudgets(department)
+//             .then(() => console.log("Viewed department budgets"))
+//             .then(() => start())
+//         })
+//     })
+// }
