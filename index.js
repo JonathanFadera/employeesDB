@@ -359,18 +359,19 @@ function deleteRole() {
       inquirer.prompt([
         {
           type: 'list',
-          name: 'id',
+          name: 'roleId',
           message: 'Which role would you like to delete?',
           choices: roleChoices
         }
       ])
-        .then(role => {
-          queries.deleteRole(role)
+        .then(({ roleId }) => {
+          queries.deleteRole(roleId)
             .then(() => console.log("Deleted role"))
             .then(() => start())
         })
     })
 }
+
 
 // delete employee function
 function deleteEmployee() {
@@ -390,12 +391,13 @@ function deleteEmployee() {
         }
       ])
         .then(employee => {
-          queries.deleteEmployee(employee)
+          queries.deleteEmployee(employee.id)
             .then(() => console.log("Deleted employee"))
             .then(() => start())
         })
     })
 }
+
 
 
 // // function to view department budgets
