@@ -73,28 +73,20 @@ class DB {
     );
   }
 
-//  Delete a department
+  // Delete a department
   deleteDepartment(departmentId) {
-    return this.connection.promise().query(
-      "DELETE FROM department WHERE id = ?",
-      departmentId
-    );
+    return this.connection.promise().query("DELETE FROM department WHERE id =?", departmentId);
   }
-  
+
   // Delete a role
   deleteRole(roleId) {
-    return this.connection.promise().query(
-      "DELETE FROM role WHERE id = ?",
-      roleId
-    );
+    return this.connection.promise().query("DELETE FROM role WHERE id =?", roleId);
   }
   // Delete an employee
   deleteEmployee(employeeId) {
-    return this.connection.promise().query(
-      "DELETE FROM employee WHERE id = ?",
-      employeeId
-    );
+    return this.connection.promise().query("DELETE FROM employee WHERE id =?", employeeId);
   }
+  
 // Create a function to view the total utilized budget of a department -- ie the combined salaries of all employees in that department
   viewDepartmentBudgets(departmentId) {
     return this.connection.promise().query(

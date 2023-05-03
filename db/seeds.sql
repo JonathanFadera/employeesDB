@@ -1,7 +1,7 @@
 USE employee_db;
 
 INSERT INTO department (name) VALUES
-('Minister for Magic'),
+('Ministry for Magic'),
 ('Magical Law Enforcement'),
 ('Magical Catastrophes'),
 ('Magical Internal Coop');

@@ -5,37 +5,36 @@ const inquirer = require('inquirer');
 const queries = require('./db/queries');
 
 init();
-async function init(){
-  console.log("welcome to the employee tracker");
+async function init() {
+  console.log("Welcome to the Hogwarts Database!");
   await start();
 }
 // prompt user to select an action to perform
 function start() {
   inquirer.prompt([
-      {
-        name: 'action',
-        type: 'list',
-        message: 'What would you like to do?',
-        choices: [
-          'View all departments',
-          'View all roles',
-          'View all employees',
-          'Add a department',
-          'Add a role',
-          'Add an employee',
-          'Add an employee manager',
-          'Update an employee manager',
-          'Delete a department',
-          'Delete a role',
-          'Delete an employee',
-          'View department budgets',
-          'Exit'
-        ]
-      }
-    ])
+    {
+      name: 'action',
+      type: 'list',
+      message: 'What would you like to do?',
+      choices: [
+        'View all departments',
+        'View all roles',
+        'View all employees',
+        'Add a department',
+        'Add a role',
+        'Add an employee',
+        'Add an employee manager',
+        'Update an employee manager',
+        'Delete a department',
+        'Delete a role',
+        'Delete an employee',
+        'View department budgets',
+        'Exit'
+      ]
+    }
+  ])
     .then(answer => {
-      let choice = answer.action;
-      switch (choice) {
+      switch (answer.action) {
         case 'View all departments':
           viewDepartments();
           break;
@@ -54,32 +53,28 @@ function start() {
         case 'Add an employee':
           addEmployee();
           break;
-          case 'Add an employee manager':
-            addEmployeeManager();
-            break;
+        case 'Add an employee manager':
+          addEmployeeManager();
+          break;
         case 'Update an employee manager':
           updateEmployeeManager();
           break;
-          case 'Delete a department':
-            deleteDepartment();
-            break;
-          case 'Delete a role':
-            deleteRole();
-            break;
-          case 'Delete an employee':
-            deleteEmployee();
-            break;
-          case 'View department budgets':
-            viewDepartmentBudgets();
-            break;
+        case 'Delete a department':
+          deleteDepartment();
+          break;
+        case 'Delete a role':
+          deleteRole();
+          break;
+        case 'Delete an employee':
+          deleteEmployee();
+          break;
+        case 'View department budgets':
+          viewDepartmentBudgets();
+          break;
         case 'Exit':
-          console.log('Goodbye!');
+          console.log("Goodbye!");
           process.exit();
           break;
-          default:
-            console.log(`Invalid action: ${choice}`);
-            break;
-
         // default:
         // exit();
       }
@@ -91,33 +86,33 @@ function start() {
 }
 
 // view department function
-function viewDepartments(){
+function viewDepartments() {
   queries.findAllDepartments()
     .then(([rows]) => {
       let departments = rows
       console.table(departments)
     })
-    .then(()=> start())
+    .then(() => start())
 }
 
 // view roles function
-function viewRoles(){
+function viewRoles() {
   queries.findAllRoles()
     .then(([rows]) => {
       let roles = rows
       console.table(roles)
     })
-    .then(()=> start())
+    .then(() => start())
 }
 
 // view employees function
-function viewEmployees(){
+function viewEmployees() {
   queries.findAllEmployees()
     .then(([rows]) => {
       let employees = rows
       console.table(employees)
     })
-    .then(()=> start())
+    .then(() => start())
 }
 
 // add department function
@@ -139,36 +134,36 @@ function addDepartment() {
 }
 
 // add role function
-function addRole(){
+function addRole() {
   queries.findAllDepartments()
-  .then(([rows])=> {
-    let departments = rows;
-    const departmentChoice = departments.map(({id, name})=> ({
-      name: name,
-      value: id,
-    }))
-    inquirer.prompt([
-      {
-        name: 'title',
-        message: 'What is the name of the role?',
-      },
-      {
-        name: 'salary',
-        message: 'What is the salary of the role?',
-      },
-      {
-        type: 'list',
-        name: 'department_id',
-        message:'Which department does this role belong to?',
-        choices: departmentChoice
-      }
-    ])
-    .then (role => {
-      queries.createRole(role)
-      .then(()=> console.log("Added role to the database"))
-      .then (()=> start())
+    .then(([rows]) => {
+      let departments = rows;
+      const departmentChoice = departments.map(({ id, name }) => ({
+        name: name,
+        value: id,
+      }))
+      inquirer.prompt([
+        {
+          name: 'title',
+          message: 'What is the name of the role?',
+        },
+        {
+          name: 'salary',
+          message: 'What is the salary of the role?',
+        },
+        {
+          type: 'list',
+          name: 'department_id',
+          message: 'Which department does this role belong to?',
+          choices: departmentChoice
+        }
+      ])
+        .then(role => {
+          queries.createRole(role)
+            .then(() => console.log("Added role to the database"))
+            .then(() => start())
+        })
     })
-  })
 
 }
 
@@ -207,198 +202,197 @@ function addEmployee() {
   });
 }
 
-// add an employee manager function
-function addEmployeeManager(){
-  queries.findAllEmployees()
-  .then(([rows])=> {
-    let employees = rows;
-    const employeeChoices = employees.map(({id, first_name, last_name})=> ({
-      name: `${first_name} ${last_name}`,
-      value: id,
-    }
-    ))
-    inquirer.prompt([
-      {
-        type: 'list',
-        name: 'id',
-        message:'Which employee would you like to set with a manager?',
-        choices: employeeChoices
-      }
-    ])
-    .then (employee => {
-      queries.findAllPossibleManagers(employee)
-      .then(([rows])=> {
-        let managers = rows;
-        const managerChoices = managers.map(({id, first_name, last_name})=> (
-          {
-            name: `${first_name} ${last_name}`,
-            value: id,
-          }
-        ))
-        inquirer.prompt([
-          {
-            type: 'list',
-            name: 'manager_id',
-            message:"Who is the employee's manager?",
-            choices: managerChoices
-          }
-        ])
-        .then (manager => {
-          queries.updateEmployeeManager(employee, manager)
-          .then(()=> console.log("Updated employee's manager"))
-          .then (()=> start())
-        })
-      })
-    })
-  })
-}
+// // add an employee manager function
+// function addEmployeeManager(){
+//   queries.findAllEmployees()
+//   .then(([rows])=> {
+//     let employees = rows;
+//     const employeeChoices = employees.map(({id, first_name, last_name})=> ({
+//       name: `${first_name} ${last_name}`,
+//       value: id,
+//     }
+//     ))
+//     inquirer.prompt([
+//       {
+//         type: 'list',
+//         name: 'id',
+//         message:'Which employee would you like to set with a manager?',
+//         choices: employeeChoices
+//       }
+//     ])
+//     .then (employee => {
+//       queries.findAllPossibleManagers(employee)
+//       .then(([rows])=> {
+//         let managers = rows;
+//         const managerChoices = managers.map(({id, first_name, last_name})=> (
+//           {
+//             name: `${first_name} ${last_name}`,
+//             value: id,
+//           }
+//         ))
+//         inquirer.prompt([
+//           {
+//             type: 'list',
+//             name: 'manager_id',
+//             message:"Who is the employee's manager?",
+//             choices: managerChoices
+//           }
+//         ])
+//         .then (manager => {
+//           queries.updateEmployeeManager(employee, manager)
+//           .then(()=> console.log("Updated employee's manager"))
+//           .then (()=> start())
+//         })
+//       })
+//     })
+//   })
+// }
 
 
 // update employee manager function
-function updateEmployeeManager(){
+function updateEmployeeManager() {
   queries.findAllEmployees()
-  .then(([rows])=> {
-    let employees = rows;
-    const employeeChoices = employees.map(({id, first_name, last_name})=> ({
-      name: `${first_name} ${last_name}`,
-      value: id,
-    }
-    ))
-    inquirer.prompt([
-      {
-        type: 'list',
-        name: 'id',
-        message:'Which employee would you like to update?',
-        choices: employeeChoices
+    .then(([rows]) => {
+      let employees = rows;
+      const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
+        name: `${first_name} ${last_name}`,
+        value: id,
       }
-    ])
-    .then (employee => {
-      queries.findAllManagers(employee)
-      .then(([rows])=> {
-        let managers = rows;
-        const managerChoices = managers.map(({id, first_name, last_name})=> (
-          {
-            name: `${first_name} ${last_name}`,
-            value: id,
-          }
-        ))
-        inquirer.prompt([
-          {
-            type: 'list',
-            name: 'manager_id',
-            message:"Who is the employee's manager?",
-            choices: managerChoices
-          }
-        ])
-        .then (manager => {
-          queries.updateEmployeeManager(employee, manager)
-          .then(()=> console.log("Updated employee's manager"))
-          .then (()=> start())
+      ))
+      inquirer.prompt([
+        {
+          type: 'list',
+          name: 'id',
+          message: 'Which employee would you like to update?',
+          choices: employeeChoices
+        }
+      ])
+        .then(employee => {
+          queries.findAllManagers(employee)
+            .then(([rows]) => {
+              let managers = rows;
+              const managerChoices = managers.map(({ id, first_name, last_name }) => (
+                {
+                  name: `${first_name} ${last_name}`,
+                  value: id,
+                }
+              ))
+              inquirer.prompt([
+                {
+                  type: 'list',
+                  name: 'manager_id',
+                  message: "Who is the employee's manager?",
+                  choices: managerChoices
+                }
+              ])
+                .then(manager => {
+                  queries.updateEmployeeManager(employee, manager)
+                    .then(() => console.log("Updated employee's manager"))
+                    .then(() => start())
+                })
+            })
         })
-      })
     })
-  })
 }
 
 
 // delete department function
-function deleteDepartment(){
+function deleteDepartment() {
   queries.findAllDepartments()
-  .then(([rows])=> {
-    let departments = rows;
-    const departmentChoices = departments.map(({id, name})=> ({
-      name: name,
-      value: id,
-    }))
-    inquirer.prompt([
-      {
-        type: 'list',
-        name: 'id',
-        message:'Which department would you like to delete?',
-        choices: departmentChoices
-      }
-    ])
-    .then (department => {
-      queries.deleteDepartment(department)
-      .then(()=> console.log("Deleted department from the database"))
-      .then (()=> start())
+    .then(([rows]) => {
+      let departments = rows;
+      const departmentChoices = departments.map(({ id, name }) => ({
+        name: name,
+        value: id,
+      }))
+      inquirer.prompt([
+        {
+          type: 'list',
+          name: 'id',
+          message: 'Which department would you like to delete?',
+          choices: departmentChoices
+        }
+      ])
+        .then(department => {
+          queries.deleteDepartment(department)
+            .then(() => console.log("Department deleted"))
+            .then(() => start())
+        })
     })
-  })
 }
 
 // delete role function
-function deleteRole(){
+function deleteRole() {
   queries.findAllRoles()
- .then(([rows])=> {
-  let roles = rows;
-  const roleChoices = roles.map(({id, title})=> ({
-    name: title,
-    value: id,
-  }))
-  inquirer.prompt([
-    {
-      type: 'list',
-      name: 'id',
-      message:'Which role would you like to delete?',
-      choices: roleChoices
-    }
-  ])
-  .then (role => {
-    queries.deleteRole(role)
-    .then(()=> console.log("Deleted role from the database"))
-    .then (()=> start())
-  }
-  )
-})
+    .then(([rows]) => {
+      let roles = rows;
+      const roleChoices = roles.map(({ id, title }) => ({
+        name: title,
+        value: id,
+      }))
+      inquirer.prompt([
+        {
+          type: 'list',
+          name: 'id',
+          message: 'Which role would you like to delete?',
+          choices: roleChoices
+        }
+      ])
+        .then(role => {
+          queries.deleteRole(role)
+            .then(() => console.log("Deleted role"))
+            .then(() => start())
+        })
+    })
 }
 
 // delete employee function
-function deleteEmployee(){
+function deleteEmployee() {
   queries.findAllEmployees()
-.then(([rows])=> {
-  let employees = rows;
-  const employeeChoices = employees.map(({id, first_name, last_name})=> ({
-    name: `${first_name} ${last_name}`,
-    value: id,
-  }))
-  inquirer.prompt([
-    {
-      type: 'list',
-      name: 'id',
-      message:'Which employee would you like to delete?',
-      choices: employeeChoices
-    }
-  ])
-  .then (employee => {
-    queries.deleteEmployee(employee)
-    .then(()=> console.log("Deleted employee from the database"))
-    .then (()=> start())
-  }
-  )
-})
+    .then(([rows]) => {
+      let employees = rows;
+      const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
+        name: `${first_name} ${last_name}`,
+        value: id,
+      }))
+      inquirer.prompt([
+        {
+          type: 'list',
+          name: 'id',
+          message: 'Which employee would you like to delete?',
+          choices: employeeChoices
+        }
+      ])
+        .then(employee => {
+          queries.deleteEmployee(employee)
+            .then(() => console.log("Deleted employee"))
+            .then(() => start())
+        })
+    })
 }
+
 
 // function to view department budgets
 function viewDepartmentBudgets() {
   queries.findAllDepartments()
-  .then(([rows])=> {
-    let departments = rows;
-    const departmentChoices = departments.map(({id, name})=> ({
-      name: name,
-      value: id,
-    }))
-    inquirer.prompt([
-      {
-        type: 'list',
-        name: 'id',
-        message:'Which department would you like to view?',
-        choices: departmentChoices
-      }
-    ])
-    .then (department => {
-      queries.viewDepartmentBudgets(department)
-      .then(()=> console.log("Viewed department budgets"))
-      .then (()=> start())
+    .then(([rows]) => {
+      let departments = rows;
+      const departmentChoices = departments.map(({ id, name }) => ({
+        name: name,
+        value: id,
+      }))
+      inquirer.prompt([
+        {
+          type: 'list',
+          name: 'id',
+          message: 'Which department would you like to view?',
+          choices: departmentChoices
+        }
+      ])
+        .then(department => {
+          queries.viewDepartmentBudgets(department)
+            .then(() => console.log("Viewed department budgets"))
+            .then(() => start())
+        })
     })
-  })
 }
