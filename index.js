@@ -8,7 +8,7 @@ init();
 async function init() {
   console.log("===================================")
   console.log("|            WELCOME TO           |")
-  console.log("|        EMPLOYEE HOGWARTS        |")
+  console.log("|         HOGWARTS EMPLOYEE       |")
   console.log("|             DATABASE            |")
   console.log("===================================");
   await start();
