@@ -32,9 +32,19 @@ CREATE TABLE employee (
   first_name VARCHAR(30) NOT NULL,
   last_name VARCHAR(30) NOT NULL,
   role_id INT NOT NULL,
-  manager_id INT,
+  manager_id INT NULL,
   FOREIGN KEY (role_id) 
   REFERENCES role (id),
   FOREIGN KEY (manager_id) 
   REFERENCES employee (id)
 );
+
+-- -- creaate a table named manager within the employee_db database
+-- CREATE TABLE manager (
+--   id INT PRIMARY KEY AUTO_INCREMENT,
+--   first_name VARCHAR(30) NOT NULL,
+--   last_name VARCHAR(30) NOT NULL,
+--   role_id INT NOT NULL,
+--   FOREIGN KEY (role_id) 
+--   REFERENCES role (id)
+-- );

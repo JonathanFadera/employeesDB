@@ -40,6 +40,19 @@ class DB {
   createEmployee(employee) {
     return this.connection.promise().query("INSERT INTO employee SET ?", employee);
   }
+  // Add a manager
+  createManager(manager) {
+    return this.connection.promise().query("INSERT INTO employee SET ?", manager);
+  }
+  
+// Find all possible managers
+  findAllPossibleManagers(employeeId) {
+    return this.connection.promise().query(
+      "SELECT id, first_name, last_name FROM employee WHERE id != ?",
+      employeeId
+    );
+  }
+
 
   // Update an employee's manager
   updateEmployeeManager(employeeId, managerId) {
@@ -66,10 +79,9 @@ class DB {
   }
 
   // Find all managers
-  findAllManagers(employeeId) {
+  findAllManagers() {
     return this.connection.promise().query(
-      "SELECT DISTINCT e.id, e.first_name, e.last_name FROM employee e WHERE e.id != ? AND e.id = e.manager_id",
-      employeeId
+      "SELECT id, first_name, last_name FROM employee WHERE id IN (SELECT manager_id FROM employee WHERE manager_id IS NOT NULL)"
     );
   }
 

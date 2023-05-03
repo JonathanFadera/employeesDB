@@ -24,6 +24,7 @@ function start() {
         'View all departments',
         'View all roles',
         'View all employees',
+        'View all managers',
         'Add a department',
         'Add a role',
         'Add an employee',
@@ -47,6 +48,9 @@ function start() {
           break;
         case 'View all employees':
           viewEmployees();
+          break;
+        case 'View all managers':
+          viewManagers();
           break;
         case 'Add a department':
           addDepartment();
@@ -123,6 +127,17 @@ function viewEmployees() {
     })
     .then(() => start())
 }
+
+// view managers function
+function viewManagers() {
+  queries.findAllManagers()
+    .then(([rows]) => {
+      let managers = rows
+      console.table(managers)
+    })
+    .then(() => start())
+}
+
 
 // add department function
 function addDepartment() {
@@ -211,52 +226,51 @@ function addEmployee() {
   });
 }
 
-// // add an employee manager function
-// function addEmployeeManager(){
-//   queries.findAllEmployees()
-//   .then(([rows])=> {
-//     let employees = rows;
-//     const employeeChoices = employees.map(({id, first_name, last_name})=> ({
-//       name: `${first_name} ${last_name}`,
-//       value: id,
-//     }
-//     ))
-//     inquirer.prompt([
-//       {
-//         type: 'list',
-//         name: 'id',
-//         message:'Which employee would you like to set with a manager?',
-//         choices: employeeChoices
-//       }
-//     ])
-//     .then (employee => {
-//       queries.findAllPossibleManagers(employee)
-//       .then(([rows])=> {
-//         let managers = rows;
-//         const managerChoices = managers.map(({id, first_name, last_name})=> (
-//           {
-//             name: `${first_name} ${last_name}`,
-//             value: id,
-//           }
-//         ))
-//         inquirer.prompt([
-//           {
-//             type: 'list',
-//             name: 'manager_id',
-//             message:"Who is the employee's manager?",
-//             choices: managerChoices
-//           }
-//         ])
-//         .then (manager => {
-//           queries.updateEmployeeManager(employee, manager)
-//           .then(()=> console.log("Updated employee's manager"))
-//           .then (()=> start())
-//         })
-//       })
-//     })
-//   })
-// }
-
+// add employee manager function
+function addEmployeeManager() {
+  queries.findAllEmployees()
+    .then(([rows]) => {
+      let employees = rows;
+      const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
+        name: `${first_name} ${last_name}`,
+        value: id,
+      }
+      ))
+      inquirer.prompt([
+        {
+          type: 'list',
+          name: 'id',
+          message: 'Which employee would you like to set with a manager?',
+          choices: employeeChoices
+        }
+      ])
+        .then(employee => {
+          queries.findAllPossibleManagers(employee)
+            .then(([rows]) => {
+              let managers = rows;
+              const managerChoices = managers.map(({ id, first_name, last_name }) => (
+                {
+                  name: `${first_name} ${last_name}`,
+                  value: id,
+                }
+              ))
+              inquirer.prompt([
+                {
+                  type: 'list',
+                  name: 'manager_id',
+                  message: "Who is the employee's manager?",
+                  choices: managerChoices
+                }
+              ])
+                .then(manager => {
+                  queries.createManager(employee, manager)
+                    .then(() => console.log("Added employee's manager"))
+                    .then(() => start())
+                })
+            })
+        })
+    })
+}
 
 // update employee manager function
 function updateEmployeeManager() {
