@@ -51,6 +51,14 @@ class DB {
   //     });
   // }
   
+  // Update an employee's role
+  updateEmployeeRole(employeeId, roleId) {
+    return this.connection.promise().query(
+      "UPDATE employee SET role_id =? WHERE id =?",
+      [roleId, employeeId]
+    );
+  }
+  
 
 
   // Find all possible managers
@@ -70,7 +78,7 @@ class DB {
     );
   }
 
-  
+
 
   // Find all employees by manager
   findAllEmployeesByManager(managerId) {

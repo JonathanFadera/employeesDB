@@ -4,6 +4,10 @@ const inquirer = require('inquirer');
 // Importing the queries module
 const queries = require('./db/queries');
 
+// Importing the connection module
+const connection = require('./db/connection');
+
+
 init();
 async function init() {
   console.log("===================================")
@@ -30,7 +34,8 @@ function start() {
         'Add a department',
         'Add a role',
         'Add an employee',
-        'Add an employee manager',
+        // 'Add an employee manager',
+        'Update an employee role',
         'Update an employee manager',
         'Delete a department',
         'Delete a role',
@@ -66,6 +71,9 @@ function start() {
         // case 'Add an employee manager':
         //   addEmployeeManager();
         //   break;
+        case 'Update an employee role':
+          updateEmployeeRole();
+          break;
         case 'Update an employee manager':
           updateEmployeeManager();
           break;
@@ -218,20 +226,8 @@ function addEmployee() {
           message: "What is the role of the employee?",
           choices: roleChoices,
         },
-        // {
-        //   type: "list",
-        //   name: "manager_id",
-        //   message: "Who is the employee's manager?",
-        //   choices: [
-        //     { name: "Harry Potter", value: 1 },
-        //     { name: "Dolores Umbridge", value: 2 },
-        //     { name: "Ron Weasley", value: 3 },
-        //     { name: "Hermione Granger", value: 4 },
-        
-        //   ],
-        // },
       ])
-          .then((employee) => {
+      .then((employee) => {
         queries
           .createEmployee(employee)
           .then(() => console.log("Added Employee to the database."))
@@ -285,7 +281,55 @@ function addEmployee() {
 //     })
 // }
 
-// update employee manager function
+
+// update employee role function
+function updateEmployeeRole() {
+  connection.query('SELECT * FROM employee', (err, results) => {
+    if (err) throw err;
+    let employees = results;
+    const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
+      name: `${first_name} ${last_name}`,
+      value: id,
+    }));
+    inquirer.prompt([
+      {
+        type: 'list',
+        name: 'employee_id',
+        message: 'Which employee would you like to update?',
+        choices: employeeChoices
+      }
+    ])
+    .then(employee => {
+      connection.query('SELECT * FROM role', (err, results) => {
+        if (err) throw err;
+        let roles = results;
+        const roleChoices = roles.map(({ id, title }) => ({
+          name: title,
+          value: id,
+        }));
+        inquirer.prompt([
+          {
+            type: 'list',
+            name: 'role_id',
+            message: "What is the employee's new role?",
+            choices: roleChoices,
+          }
+        ])
+        .then(role => {
+          connection.query('UPDATE employee SET role_id = ? WHERE id = ?', [role.role_id, employee.employee_id], (err, results) => {
+            if (err) throw err;
+            console.log("Updated employee's role");
+            start();
+          });
+        });
+      });
+    });
+  });
+}
+
+
+
+// update employee manager function and also add a null option for manager
 function updateEmployeeManager() {
   queries.findAllEmployees()
     .then(([rows]) => {
@@ -306,12 +350,13 @@ function updateEmployeeManager() {
           queries.findAllManagers()
             .then(([rows]) => {
               let managers = rows;
-              const managerChoices = managers.map(({ id, first_name, last_name }) => (
-                {
+              const managerChoices = [
+                { name: 'Null', value: null }, // Add a "Null" option
+                ...managers.map(({ id, first_name, last_name }) => ({
                   name: `${first_name} ${last_name}`,
                   value: id,
-                }
-              ));
+                }))
+              ];
               inquirer.prompt([
                 {
                   type: 'list',
@@ -329,6 +374,7 @@ function updateEmployeeManager() {
         });
     });
 }
+
 
 
 
