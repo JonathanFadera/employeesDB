@@ -32,6 +32,8 @@ As a small business owner, I want to be able to view and manage the departments,
 The following images show the web application's appearance and functionality:
 
   ![screenshot of the terminal](./assets/images/Screenshot%202023-05-03%20at%208.35.51%20PM.png)
+  
+ [Demo Link]
 
 ## Credits
 [Jonathan Fadera](https://github.com/JonathanFadera), [Week_12-SQL](https://ucb.bootcampcontent.com/UCB-Coding-Bootcamp/UCB-VIRT-FSF-PT-01-2023-U-LOLC/-/tree/main/Week_12-SQL)
