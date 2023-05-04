@@ -50,7 +50,7 @@ class DB {
   //       throw new Error('Failed to create employee manager.');
   //     });
   // }
-  
+
   // Update an employee's role
   updateEmployeeRole(employeeId, roleId) {
     return this.connection.promise().query(
@@ -58,7 +58,7 @@ class DB {
       [roleId, employeeId]
     );
   }
-  
+
 
 
   // Find all possible managers

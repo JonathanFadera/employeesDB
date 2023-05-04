@@ -34,7 +34,6 @@ function start() {
         'Add a department',
         'Add a role',
         'Add an employee',
-        // 'Add an employee manager',
         'Update an employee role',
         'Update an employee manager',
         'Delete a department',
@@ -68,9 +67,6 @@ function start() {
         case 'Add an employee':
           addEmployee();
           break;
-        // case 'Add an employee manager':
-        //   addEmployeeManager();
-        //   break;
         case 'Update an employee role':
           updateEmployeeRole();
           break;
@@ -198,7 +194,6 @@ function addRole() {
             .then(() => start())
         })
     })
-
 }
 
 // add employee function
@@ -236,52 +231,6 @@ function addEmployee() {
   });
 }
 
-// // add employee manager function
-// function addEmployeeManager() {
-//   queries.findAllEmployees()
-//     .then(([rows]) => {
-//       let employees = rows;
-//       const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
-//         name: `${first_name} ${last_name}`,
-//         value: id,
-//       }))
-//       inquirer.prompt([
-//         {
-//           type: 'list',
-//           name: 'id',
-//           message: 'Which employee would you like to set with a manager?',
-//           choices: employeeChoices
-//         }
-//       ])
-//         .then(employee => {
-//           queries.findAllPossibleManagers(employee)
-//             .then(([rows]) => {
-//               let managers = rows;
-//               const employeeChoices = managers.map(({ id, first_name, last_name }) => (
-//                 {
-//                   name: `${first_name} ${last_name}`,
-//                   value: id,
-//                 }
-//               ))
-//               inquirer.prompt([
-//                 {
-//                   type: 'list',
-//                   name: 'manager_id',
-//                   message: "Who is the employee's manager?",
-//                   choices: employeeChoices,
-//                 }
-//               ])
-//                 .then(manager => {
-//                   queries.createManager(employee, manager)
-//                     .then(() => console.log("Added employee's manager"))
-//                     .then(() => start())
-//                 })
-//             })
-//         })
-//     })
-// }
-
-
 // update employee role function
 function updateEmployeeRole() {
   connection.query('SELECT * FROM employee', (err, results) => {
@@ -299,35 +248,33 @@ function updateEmployeeRole() {
         choices: employeeChoices
       }
     ])
-    .then(employee => {
-      connection.query('SELECT * FROM role', (err, results) => {
-        if (err) throw err;
-        let roles = results;
-        const roleChoices = roles.map(({ id, title }) => ({
-          name: title,
-          value: id,
-        }));
-        inquirer.prompt([
-          {
-            type: 'list',
-            name: 'role_id',
-            message: "What is the employee's new role?",
-            choices: roleChoices,
-          }
-        ])
-        .then(role => {
-          connection.query('UPDATE employee SET role_id = ? WHERE id = ?', [role.role_id, employee.employee_id], (err, results) => {
-            if (err) throw err;
-            console.log("Updated employee's role");
-            start();
-          });
+      .then(employee => {
+        connection.query('SELECT * FROM role', (err, results) => {
+          if (err) throw err;
+          let roles = results;
+          const roleChoices = roles.map(({ id, title }) => ({
+            name: title,
+            value: id,
+          }));
+          inquirer.prompt([
+            {
+              type: 'list',
+              name: 'role_id',
+              message: "What is the employee's new role?",
+              choices: roleChoices,
+            }
+          ])
+            .then(role => {
+              connection.query('UPDATE employee SET role_id = ? WHERE id = ?', [role.role_id, employee.employee_id], (err, results) => {
+                if (err) throw err;
+                console.log("Updated employee's role");
+                start();
+              });
+            });
         });
       });
-    });
   });
 }
-
-
 
 // update employee manager function and also add a null option for manager
 function updateEmployeeManager() {
@@ -374,9 +321,6 @@ function updateEmployeeManager() {
         });
     });
 }
-
-
-
 
 // delete department function
 function deleteDepartment() {
