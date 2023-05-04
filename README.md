@@ -29,6 +29,7 @@ As a small business owner, I want to be able to view and manage the departments,
 
 ## Mock-up
 The following images show the web application's appearance and functionality:
+
   ![screenshot of the app with save button](./public/assets/images/Mock-up%20with%20save%20button.png)
 
 ## Credits
@@ -40,4 +41,4 @@ If there are any questions, feel free to contact my email at: ericsonhnc@gmail.c
 You can also find me on GitHub at: [JonathanFadera](https://www.github.com/JonathanFadera)
 
 ## Deployed Application
-This application was deployed at [Heroku Dashboard](https://cornell-notes-0420.herokuapp.com/).
+This application was deployed at (https://github.com/JonathanFadera/employeesDB).
