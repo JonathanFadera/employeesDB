@@ -21,6 +21,8 @@ A command-line application built from scratch to manage a Hogwart's employee dat
   Install [Inquirer package](https://www.npmjs.com/package/inquirer/v/8.2.4).
 
   Install [MySQL2 package](https://www.npmjs.com/package/mysql2).
+  
+  Run the application on the terminal with `npm start`.
 
 ## Usage
 As a small business owner, I want to be able to view and manage the departments, roles, and employees in Hogwart's School of Witchcraft and Wizardry.
