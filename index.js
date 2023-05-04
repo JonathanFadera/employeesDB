@@ -7,7 +7,6 @@ const queries = require('./db/queries');
 // Importing the connection module
 const connection = require('./db/connection');
 
-
 init();
 async function init() {
   console.log("===================================")
@@ -31,6 +30,8 @@ function start() {
         'View all roles',
         'View all employees',
         'View all managers',
+        'View all employees by manager',
+        'View all employees by department',
         'Add a department',
         'Add a role',
         'Add an employee',
@@ -57,6 +58,12 @@ function start() {
           break;
         case 'View all managers':
           viewManagers();
+          break;
+        case 'View all employees by manager':
+          viewEmployeesByManager();
+          break;
+        case 'View all employees by department':
+          viewEmployeesByDepartment();
           break;
         case 'Add a department':
           addDepartment();
@@ -140,6 +147,42 @@ function viewManagers() {
     .then(([rows]) => {
       let managers = rows
       console.table(managers)
+    })
+    .then(() => start())
+}
+
+// view employees by manager function
+const readline = require('readline');
+
+function viewEmployeesByManager() {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  rl.question('Enter the manager ID: ', (managerId) => {
+    if (isNaN(managerId)) {
+      console.error('Invalid manager ID. Please enter a valid number.');
+      viewEmployeesByManager();
+    } else {
+      queries.findAllEmployeesByManager(managerId)
+        .then(([rows]) => {
+          let employees = rows
+          console.table(employees)
+        })
+        .then(() => start())
+      rl.close();
+
+    }
+  });
+}
+
+// view employees by department function
+function viewEmployeesByDepartment() {
+  queries.findAllEmployeesByDepartment()
+    .then(([rows]) => {
+      let employees = rows
+      console.table(employees)
     })
     .then(() => start())
 }
@@ -373,7 +416,6 @@ function deleteRole() {
     })
 }
 
-
 // delete employee function
 function deleteEmployee() {
   queries.findAllEmployees()
@@ -399,9 +441,7 @@ function deleteEmployee() {
     })
 }
 
-
-
-// // function to view department budgets
+// // view department budgets function
 // function viewDepartmentBudgets() {
 //   queries.findAllDepartments()
 //     .then(([rows]) => {
@@ -409,19 +449,30 @@ function deleteEmployee() {
 //       const departmentChoices = departments.map(({ id, name }) => ({
 //         name: name,
 //         value: id,
-//       }))
+//       }));
 //       inquirer.prompt([
 //         {
 //           type: 'list',
 //           name: 'id',
 //           message: 'Which department would you like to view?',
-//           choices: departmentChoices
-//         }
+//           choices: departmentChoices,
+//         },
 //       ])
 //         .then(department => {
-//           queries.viewDepartmentBudgets(department)
-//             .then(() => console.log("Viewed department budgets"))
-//             .then(() => start())
-//         })
+//           queries.viewDepartmentBudgets(department.id)
+//             .then(([rows]) => {
+//               console.table(rows); // Display query result in console
+//               console.log("Viewed department budgets");
+//               start(); // Go back to main menu
+//             })
+//             .catch((err) => {
+//               console.error(err);
+//               start(); // Go back to main menu
+//             });
+//         });
 //     })
+//     .catch((err) => {
+//       console.error(err);
+//       start(); // Go back to main menu
+//     });
 // }

@@ -26,6 +26,19 @@ class DB {
     );
   }
 
+  // View employees by department
+  findAllEmployeesByManager(managerId) {
+    const sql = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager_name 
+                 FROM employee 
+                 LEFT JOIN role ON employee.role_id = role.id 
+                 LEFT JOIN department ON role.department_id = department.id 
+                 LEFT JOIN employee manager ON employee.manager_id = manager.id 
+                 WHERE manager.id = ?`;
+
+    return connection.query(sql, [managerId]);
+  }
+
+
   // Add a department
   createDepartment(department) {
     return this.connection.promise().query("INSERT INTO department SET ?", department);
@@ -40,16 +53,6 @@ class DB {
   createEmployee(employee) {
     return this.connection.promise().query("INSERT INTO employee SET ?", employee);
   }
-  // // Add an employee manager
-  // createEmployeeManager(employeeManager) {
-  //   return this.connection.promise()
-  //     .query("INSERT INTO employee SET ?", employeeManager)
-  //     .then(([rows]) => rows)
-  //     .catch((error) => {
-  //       console.error(error);
-  //       throw new Error('Failed to create employee manager.');
-  //     });
-  // }
 
   // Update an employee's role
   updateEmployeeRole(employeeId, roleId) {
@@ -59,8 +62,6 @@ class DB {
     );
   }
 
-
-
   // Find all possible managers
   findAllPossibleManagers(employeeId) {
     return this.connection.promise().query(
@@ -69,7 +70,6 @@ class DB {
     );
   }
 
-
   // Update an employee's manager
   updateEmployeeManager(employeeId, managerId) {
     return this.connection.promise().query(
@@ -77,8 +77,6 @@ class DB {
       [managerId, employeeId]
     );
   }
-
-
 
   // Find all employees by manager
   findAllEmployeesByManager(managerId) {
@@ -117,13 +115,14 @@ class DB {
     return this.connection.promise().query("DELETE FROM employee WHERE id =?", employeeId);
   }
 }
-//   // Create a function to view the total utilized budget of a department -- ie the combined salaries of all employees in that department
-//   viewDepartmentBudgets(department) {
-//     return this.connection.promise().query(
-//       "SELECT department.name AS department, SUM(role.salary) AS budget FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id WHERE department.name = ?",
-//       department
-//     );
-//   }
+
+// // View department budgets
+// function viewDepartmentBudgets(department) {
+//   return this.connection.promise().query(
+//     "SELECT department.name AS department, SUM(role.salary) AS budget FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id WHERE department.id = ?",
+//     department
+//   );
 // }
 
 module.exports = new DB(connection);
+// module.exports = { viewDepartmentBudgets };
