@@ -26,7 +26,7 @@ class DB {
     );
   }
 
-  // View employees by department
+  // View employees by manager
   findAllEmployeesByManager(managerId) {
     const sql = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager_name 
                  FROM employee 
@@ -38,6 +38,17 @@ class DB {
     return connection.query(sql, [managerId]);
   }
 
+  // View employees by department
+  findAllEmployeesByDepartment(departmentId) {
+    const sql = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary
+                  FROM employee
+                  LEFT JOIN role ON employee.role_id = role.id
+                  LEFT JOIN department ON role.department_id = department.id
+                  WHERE department.id = ?`;
+                  return connection.query(sql, [departmentId]);
+  }
+
+  // View employees by role
 
   // Add a department
   createDepartment(department) {

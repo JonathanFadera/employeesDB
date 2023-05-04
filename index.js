@@ -179,14 +179,31 @@ function viewEmployeesByManager() {
 
 // view employees by department function
 function viewEmployeesByDepartment() {
-  queries.findAllEmployeesByDepartment()
+  queries.findAllDepartments()
     .then(([rows]) => {
-      let employees = rows
-      console.table(employees)
+      let departments = rows;
+      const departmentChoices = departments.map(({ id, name }) => ({
+        name: name,
+        value: id,
+      }));
+      inquirer.prompt([
+        {
+          type: 'list',
+          name: 'department_id',
+          message: 'Which department does this role belong to?',
+          choices: departmentChoices
+        }
+      ])
+        .then(department => {
+          queries.findAllEmployeesByDepartment(department.department_id)
+            .then(([rows]) => {
+              let employees = rows
+              console.table(employees)
+            })
+            .then(() => start())
+        })
     })
-    .then(() => start())
 }
-
 
 // add department function
 function addDepartment() {
