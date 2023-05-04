@@ -48,8 +48,6 @@ class DB {
                   return connection.query(sql, [departmentId]);
   }
 
-  // View employees by role
-
   // Add a department
   createDepartment(department) {
     return this.connection.promise().query("INSERT INTO department SET ?", department);
@@ -127,13 +125,23 @@ class DB {
   }
 }
 
-// // View department budgets
-// function viewDepartmentBudgets(department) {
-//   return this.connection.promise().query(
-//     "SELECT department.name AS department, SUM(role.salary) AS budget FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id WHERE department.id = ?",
-//     department
-//   );
-// }
+// // View the total utilized budget of a department -- ie the combined salaries of all employees in that department
+// const queries = {
+//   findAllDepartments() {
+//     return connection.promise().query('SELECT * FROM department');
+//   },
+
+//   // Add the viewDepartmentBudgets function here
+//   viewDepartmentBudgets(departmentId) {
+//     const sql = `SELECT department.name AS department, SUM(role.salary) AS budget
+//                   FROM employee
+//                   LEFT JOIN role ON employee.role_id = role.id
+//                   LEFT JOIN department ON role.department_id = department.id
+//                   WHERE department.id = ?
+//                   GROUP BY department.id`;
+//     return connection.promise().query(sql, [departmentId]);
+//   }
+// };
+
 
 module.exports = new DB(connection);
-// module.exports = { viewDepartmentBudgets };

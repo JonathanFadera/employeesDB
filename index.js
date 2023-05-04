@@ -89,9 +89,9 @@ function start() {
         case 'Delete an employee':
           deleteEmployee();
           break;
-        case 'View department budgets':
-          viewDepartmentBudgets();
-          break;
+        // case 'View department budgets':
+        //   viewDepartmentBudgets();
+        //   break;
         case 'Exit':
           console.log("===================================")
           console.log("|            THANK YOU            |")
@@ -457,8 +457,8 @@ function deleteEmployee() {
         })
     })
 }
+// // View total utilized budget of a department -- ie the combined salaries of all employees in that department
 
-// // view department budgets function
 // function viewDepartmentBudgets() {
 //   queries.findAllDepartments()
 //     .then(([rows]) => {
@@ -470,26 +470,19 @@ function deleteEmployee() {
 //       inquirer.prompt([
 //         {
 //           type: 'list',
-//           name: 'id',
-//           message: 'Which department would you like to view?',
-//           choices: departmentChoices,
-//         },
+//           name: 'department_id',
+//           message: 'Which department does this role belong to?',
+//           choices: departmentChoices
+//         }
 //       ])
 //         .then(department => {
-//           queries.viewDepartmentBudgets(department.id)
+//           queries.viewDepartmentBudgets(department.department_id)
 //             .then(([rows]) => {
-//               console.table(rows); // Display query result in console
-//               console.log("Viewed department budgets");
-//               start(); // Go back to main menu
+//               let budget = rows
+//               console.table(budget)
 //             })
-//             .catch((err) => {
-//               console.error(err);
-//               start(); // Go back to main menu
-//             });
-//         });
+//             .then(() => start())
+//         })
 //     })
-//     .catch((err) => {
-//       console.error(err);
-//       start(); // Go back to main menu
-//     });
 // }
+// module.exports = { start, viewDepartmentBudgets, queries,};
