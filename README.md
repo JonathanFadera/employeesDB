@@ -8,6 +8,8 @@ SQL Challenge : Employee Tracker
 A command-line application built from scratch to manage a Hogwart's employee database, using Node.js, Inquirer, and MySQL.
 
 ## Table of Contents 
+- [Hogwarts Employee Database](#hogwarts-employee-database)
+  - [Description](#description)
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
   - [Usage](#usage)
@@ -33,7 +35,7 @@ The following images show the web application's appearance and functionality:
 
   ![screenshot of the terminal](./assets/images/Screenshot%202023-05-03%20at%208.35.51%20PM.png)
   
- [Demo Link]
+ [Demo Link](https://watch.screencastify.com/v/MYAgn2dJJSuny2jY2DAi)
 
 ## Credits
 [Jonathan Fadera](https://github.com/JonathanFadera), [Week_12-SQL](https://ucb.bootcampcontent.com/UCB-Coding-Bootcamp/UCB-VIRT-FSF-PT-01-2023-U-LOLC/-/tree/main/Week_12-SQL)
