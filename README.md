@@ -42,4 +42,4 @@ If there are any questions, feel free to contact my email at: ericsonhnc@gmail.c
 You can also find me on GitHub at: [JonathanFadera](https://www.github.com/JonathanFadera)
 
 ## Deployed Application
-This application was deployed at (https://cornell-notes-0420.herokuapp.com/).
+This application was deployed at (https://github.com/JonathanFadera/Hogwarts_Database/).
