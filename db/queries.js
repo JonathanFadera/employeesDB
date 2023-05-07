@@ -63,6 +63,12 @@ class DB {
     return this.connection.promise().query("INSERT INTO employee SET ?", employee);
   }
 
+  // add a manager 
+  createManager(manager) {
+    return this.connection.promise().query("INSERT INTO employee SET ?", manager);
+  }
+  
+
   // Update an employee's role
   updateEmployeeRole(employeeId, roleId) {
     return this.connection.promise().query(

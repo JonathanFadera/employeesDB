@@ -35,6 +35,7 @@ function start() {
         'Add a department',
         'Add a role',
         'Add an employee',
+        'Add an employee manager',
         'Update an employee role',
         'Update an employee manager',
         'Delete a department',
@@ -73,6 +74,9 @@ function start() {
           break;
         case 'Add an employee':
           addEmployee();
+          break;
+        case 'Add an employee manager':
+          addEmployeeManager();
           break;
         case 'Update an employee role':
           updateEmployeeRole();
@@ -290,6 +294,50 @@ function addEmployee() {
       });
   });
 }
+
+// add employee manager function
+function addEmployeeManager() {
+  queries.findAllEmployees().then(([rows]) => {
+    let employees = rows;
+    const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
+      name: `${first_name} ${last_name}`,
+      value: id,
+      manager_id: null,
+    }));
+    inquirer.prompt([
+      {
+        type: 'list',
+        name: 'employee_id',
+        message: 'Which employee would you like to update?',
+        choices: employeeChoices
+      }
+    ])
+      .then(employee => {
+        queries.findAllPossibleManagers(employee.employee_id)
+          .then(([rows]) => {
+            let managers = rows;
+            const managerChoices = managers.map(({ id, first_name, last_name }) => ({
+              name: `${first_name} ${last_name}`,
+              value: id,
+            }));
+            inquirer.prompt([
+              {
+                type: 'list',
+                name:'manager_id',
+                message: "Who is the employee's manager?",
+                choices: managerChoices,
+              }
+            ])
+              .then(manager => {
+                queries.updateEmployeeManager(employee.employee_id, manager.manager_id)
+                  .then(() => console.log("Updated employee's manager"))
+                  .then(() => start())
+              })
+          })
+      })
+  })
+}
+
 
 // update employee role function
 function updateEmployeeRole() {
